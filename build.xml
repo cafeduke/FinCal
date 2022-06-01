@@ -1,0 +1,38 @@
+<project name="FinCal" default="main">
+
+  <target name="main" depends="clean,build">
+  </target>
+
+  <target name="build" depends="compile">
+    <jar destfile="${dir.lib}/FinCal.jar">
+      <fileset dir="${dir.classes}" includes="**/*.class" />
+      <manifest>
+         <attribute name="Main-Class" value="com.github.cafeduke.fincal.Valuation" />
+      </manifest>
+    </jar>
+    <echo message="Built ${dir.lib}/JGet.jar"/>
+  </target>
+
+  <target name="clean"  depends="properties">
+    <delete dir="${dir.classes}" failonerror="false"/>
+    <mkdir dir="${dir.classes}"/>
+  </target>
+
+  <target name="compile" depends="properties">
+    <javac srcdir="${dir.source}" destdir="${dir.classes}" includes="**/*.java" classpathref="classpath.testsource"/>
+  </target>
+
+  <target name="properties">
+    <property name="dir.source"  value="${basedir}/src"     />
+    <property name="dir.classes" value="${basedir}/classes" />
+    <property name="dir.lib"     value="${basedir}/lib"     />
+
+    <mkdir dir="${dir.classes}"/>
+
+    <path id="classpath.testsource">
+      <pathelement location="${dir.classes}" />
+      <fileset dir="${dir.lib}" includes="**/*.jar"/>
+    </path>
+  </target>
+
+</project>
