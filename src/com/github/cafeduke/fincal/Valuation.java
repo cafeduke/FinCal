@@ -65,7 +65,7 @@ public class Valuation
         double pmtForPP = lastFutureCF * (1 + rateGGPP);
 
         double perpetualFutureCF = FinUtil.getGrowingPerpetuity(pmtForPP, rateRiskPP, rateGGPP);
-        double perpetualPresentCF = FinUtil.getPresentValue(perpetualFutureCF, rateFD, totalYear);
+        double perpetualPresentCF = FinUtil.getPresentValueGivenFutureValue(perpetualFutureCF, rateFD, totalYear);
 
         double sumPresentCF = listPresentCF.stream().mapToDouble(Double::doubleValue).sum();
         double myMCap = perpetualPresentCF + sumPresentCF;
@@ -108,7 +108,7 @@ public class Valuation
             {
                 ++sumYear;
                 currFutureCF = FinUtil.getNextCashFlow(currFutureCF, r);
-                currPresentCF = FinUtil.getPresentValue(currFutureCF, rateFD, sumYear);
+                currPresentCF = FinUtil.getPresentValueGivenFutureValue(currFutureCF, rateFD, sumYear);
                 listFutureCF.add(currFutureCF);
                 listPresentCF.add(currPresentCF);
             }

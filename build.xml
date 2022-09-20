@@ -1,37 +1,50 @@
-<project name="FinCal" default="main">
+<project name="FinCal" default="main" xmlns:ivy="antlib:org.apache.ivy.ant">
 
-  <target name="main" depends="clean,build">
-  </target>
+  <path id="path.ant.extn">
+    <pathelement location="${basedir}/lib/ant-plugin/ant-contrib-1.0b3.jar" />
+  </path>
+
+  <taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="path.ant.extn" />
+
+  <target name="main" depends="build"></target>
 
   <target name="build" depends="compile">
+
+    <pathconvert property="path.lib.jars" pathsep=" ">
+      <fileset dir="${dir.lib}" includes="**/*.jar" excludes="ant-plugin/*.jar" />
+      <map from="${dir.lib}/" to="" />
+    </pathconvert>
+
     <jar destfile="${dir.lib}/FinCal.jar">
       <fileset dir="${dir.classes}" includes="**/*.class" />
       <manifest>
-         <attribute name="Main-Class" value="com.github.cafeduke.fincal.Valuation" />
+        <attribute name="Main-Class" value="com.github.cafeduke.fincal.Valuation" />
+        <attribute name="Class-Path" value="${path.lib.jars}" />
       </manifest>
     </jar>
-    <echo message="Built ${dir.lib}/JGet.jar"/>
+    <echo message="Built ${dir.lib}/FinCal.jar" />
   </target>
 
-  <target name="clean"  depends="properties">
-    <delete dir="${dir.classes}" failonerror="false"/>
-    <mkdir dir="${dir.classes}"/>
+  <target name="clean" depends="properties">
+    <delete dir="${dir.classes}" failonerror="false" />
+    <mkdir dir="${dir.classes}" />
   </target>
 
   <target name="compile" depends="properties">
-    <javac srcdir="${dir.source}" destdir="${dir.classes}" includes="**/*.java" classpathref="classpath.testsource"/>
+    <javac srcdir="${dir.source}" destdir="${dir.classes}" includes="**/*.java" classpathref="classpath.testsource" />
   </target>
 
   <target name="properties">
-    <property name="dir.source"  value="${basedir}/src"     />
+    <property name="dir.source" value="${basedir}/src" />
     <property name="dir.classes" value="${basedir}/classes" />
-    <property name="dir.lib"     value="${basedir}/lib"     />
+    <property name="dir.lib" value="${basedir}/lib" />
+    <property name="dir.lib.project" value="${dir.lib}/project" />
 
-    <mkdir dir="${dir.classes}"/>
+    <mkdir dir="${dir.classes}" />
 
     <path id="classpath.testsource">
       <pathelement location="${dir.classes}" />
-      <fileset dir="${dir.lib}" includes="**/*.jar"/>
+      <fileset dir="${dir.lib.project}/" includes="*.jar" />
     </path>
   </target>
 
